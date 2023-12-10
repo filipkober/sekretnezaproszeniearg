@@ -5,14 +5,14 @@ use base64::{engine::general_purpose, Engine};
 use crossterm::event::{read, KeyEvent, Event, KeyCode, KeyEventKind};
 use tui::{Terminal, widgets::{Block, Borders, Paragraph}, text::{Span, Spans}, style::{Modifier, Style}, backend::CrosstermBackend};
 
-use crate::save::save::{save_settings, Level};
+use crate::util::save::save::{save_settings, empty_savefile};
 
 pub static QUESTIONS: [&str; 6] = [
     "Ulubiony kolor: ",
     "Ulubione zwierze: ",
     "Ulubiony kryzys gospodarczy: ",
     "Twoja nazwa: ",
-    "Co było pierwsze kura czy jajo: ",
+    "Jeśli miałbyś zostać martwym obiektem, to czym byś został: ",
     "Twój najgłębszy sekret: ",
 ];
 
@@ -93,19 +93,43 @@ pub fn entropy(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>) -> Result<
     let block = Block::default()
             .title("Generator entropii")
             .borders(Borders::ALL);
-    let spans: Vec<Spans> = vec![
+    let mut spans: Vec<Spans> = vec![
         Spans::from("Entropia wygenerowana pomyślnie!"),
-        Spans::from(vec![Span::from("Entropia: "), Span::styled(str_encoded.clone() , Style::default().fg(tui::style::Color::LightGreen))]),
-        Spans::from(Span::styled("Powrót do aplikacji za 3 sekundy...", Style::default().fg(tui::style::Color::LightRed)))
     ];
-    let para = Paragraph::new(spans).block(block);
+    let para = Paragraph::new(spans.clone()).block(block);
     terminal.draw(|f| {
         f.render_widget(para, f.size());
     })?;
 
-    thread::sleep(Duration::from_millis(3_000));
+    thread::sleep(Duration::from_millis(1_000));
 
-    save_settings(str_encoded.clone(), vec![])?;
+    spans.push(Spans::from(vec![Span::from("Entropia: "), Span::styled(str_encoded.clone() , Style::default().fg(tui::style::Color::LightGreen))]));
+
+    terminal.draw(|f| {
+        let block = Block::default()
+            .title("Generator entropii")
+            .borders(Borders::ALL);
+        let para = Paragraph::new(spans.clone()).block(block);
+        f.render_widget(para, f.size());
+    })?;
+
+    thread::sleep(Duration::from_millis(1_000));
+
+    spans.push(Spans::from(Span::styled("Powrót do aplikacji za 3 sekundy...", Style::default().fg(tui::style::Color::LightRed))));
+
+    terminal.draw(|f| {
+        let block = Block::default()
+            .title("Generator entropii")
+            .borders(Borders::ALL);
+        let para = Paragraph::new(spans.clone()).block(block);
+        f.render_widget(para, f.size());
+    })?;
+
+    let empty_save = empty_savefile(str_encoded.clone());
+
+    save_settings(str_encoded.clone(), empty_save.levels)?;
+
+    thread::sleep(Duration::from_millis(3_000));
 
     Ok((str_encoded, answers))
 }

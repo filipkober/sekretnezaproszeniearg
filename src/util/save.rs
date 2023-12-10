@@ -121,6 +121,104 @@ pub mod save {
         }
     }
 
+    pub fn empty_savefile(entropy: String) -> Savefile {
+        Savefile {
+            entropy: entropy,
+            levels: vec![
+                Level {
+                    time: 0f32,
+                    completed: false,
+                    name: "80808".to_string()
+                },
+                Level {
+                    time: 0f32,
+                    completed: false,
+                    name: "HAZARD DUTY PAY!".to_string()
+                },
+                Level {
+                    time: 0f32,
+                    completed: false,
+                    name: "Krystle".to_string()
+                },
+                Level {
+                    time: 0f32,
+                    completed: false,
+                    name: "Rainbow Six".to_string()
+                },
+                Level {
+                    time: 0f32,
+                    completed: false,
+                    name: "Hollywood Baby".to_string()
+                },
+                Level {
+                    time: 0f32,
+                    completed: false,
+                    name: "Western Union".to_string()
+                },
+                Level {
+                    time: 0f32,
+                    completed: false,
+                    name: "toothless".to_string()
+                },
+                Level {
+                    time: 0f32,
+                    completed: false,
+                    name: "God Loves You".to_string()
+                },
+                Level {
+                    time: 0f32,
+                    completed: false,
+                    name: "Known For It".to_string()
+                },
+                Level {
+                    time: 0f32,
+                    completed: false,
+                    name: "Drake Era".to_string()
+                },
+                Level {
+                    time: 0f32,
+                    completed: false,
+                    name: "Out by 16, Dead on the Scene".to_string()
+                },
+                Level {
+                    time: 0f32,
+                    completed: false,
+                    name: "The Fear".to_string()
+                },
+                Level {
+                    time: 0f32,
+                    completed: false,
+                    name: "Tantor".to_string()
+                },
+                Level {
+                    time: 0f32,
+                    completed: false,
+                    name: "DEATHCAMP".to_string()
+                },
+                Level {
+                    time: 0f32,
+                    completed: false,
+                    name: "Burfict!".to_string()
+                },
+                Level {
+                    time: 0f32,
+                    completed: false,
+                    name: "I Cannot Fucking Wait Til Morrissey Dies".to_string()
+                },
+                Level {
+                    time: 0f32,
+                    completed: false,
+                    name: "Free The Frail".to_string()
+                },
+                Level {
+                    time: 0f32,
+                    completed: false,
+                    name: "Today".to_string()
+                }
+            ]
+        }
+    }
+
     pub fn save_settings(entropy: String, levels: Vec<Level>) -> Result<(), io::Error> {
         let levels_vec: Vec<JsonValue> = levels.into_iter().map(|l| {l.into()}).collect();
         let json_data = json::stringify(object!{
