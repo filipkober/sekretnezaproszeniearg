@@ -1,5 +1,5 @@
 [package]
-name = "util"
+name = "invite-levels"
 version = "0.1.0"
 
 [lib]

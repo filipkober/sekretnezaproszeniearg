@@ -1,5 +1,5 @@
 pub mod termutils {
-    use std::{error::Error, io};
+    use std::io;
 
     use crossterm::{
         event::{DisableMouseCapture, EnableMouseCapture},

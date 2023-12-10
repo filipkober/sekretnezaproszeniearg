@@ -12,7 +12,7 @@ pub static QUESTIONS: [&str; 6] = [
     "Ulubione zwierze: ",
     "Ulubiony kryzys gospodarczy: ",
     "Twoja nazwa: ",
-    "Jeśli miałbyś zostać martwym obiektem, to czym byś został: ",
+    "Jeśli miałbyś zostać dowolną rzeczą, to czym byś został: ",
     "Twój najgłębszy sekret: ",
 ];
 

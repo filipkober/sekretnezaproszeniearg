@@ -1,7 +1,7 @@
 pub mod save {
     use std::{io::{self, Write}, fs::{File, self}, fmt::Debug};
 
-    use json::{object, JsonValue, array};
+    use json::{object, JsonValue};
 
     pub struct Level {
         pub name: String,
@@ -229,7 +229,7 @@ pub mod save {
         file.write_all(json_data.as_bytes())
     }
     pub fn read_settings() -> Result<Savefile, io::Error> {
-        let mut file_content = fs::read_to_string("data.json")?;
+        let file_content = fs::read_to_string("data.json")?;
         let file_json = json::parse(&file_content).unwrap();
         Ok(file_json.into())
     }
