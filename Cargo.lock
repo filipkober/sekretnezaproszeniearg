@@ -90,10 +90,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "invite-levels"
-version = "0.1.0"
-
-[[package]]
 name = "json"
 version = "0.12.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -231,10 +227,6 @@ name = "unicode-width"
 version = "0.1.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e51733f11c9c4f72aa0c160008246859e340b00807569a0da0e7a1079b27ba85"
-
-[[package]]
-name = "util"
-version = "0.1.0"
 
 [[package]]
 name = "wasi"

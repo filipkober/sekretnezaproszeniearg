@@ -1,11 +1,10 @@
-pub mod entropy {
 use std::{thread, time::Duration, io};
 
 use base64::{engine::general_purpose, Engine};
 use crossterm::event::{read, KeyEvent, Event, KeyCode, KeyEventKind};
 use tui::{Terminal, widgets::{Block, Borders, Paragraph}, text::{Span, Spans}, style::{Modifier, Style}, backend::CrosstermBackend};
 
-use crate::util::save::save::{save_settings, empty_savefile};
+use crate::util::save::{save_settings, empty_savefile};
 
 pub static QUESTIONS: [&str; 6] = [
     "Ulubiony kolor: ",
@@ -132,5 +131,4 @@ pub fn entropy(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>) -> Result<
     thread::sleep(Duration::from_millis(3_000));
 
     Ok((str_encoded, answers))
-}
 }

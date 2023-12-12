@@ -1,6 +1,0 @@
-[package]
-name = "invite-levels"
-version = "0.1.0"
-
-[lib]
-path = "src/main.rs"
