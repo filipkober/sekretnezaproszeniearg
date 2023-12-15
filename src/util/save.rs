@@ -6,24 +6,17 @@ use std::{
 
 use json::{object, JsonValue};
 
+#[derive(Clone, Debug)]
 pub struct Level {
     pub name: String,
     pub time: f32,
     pub completed: bool,
+    pub used_hints: usize,
 }
+#[derive(Debug)]
 pub struct Savefile {
     pub entropy: String,
     pub levels: Vec<Level>,
-}
-
-impl Clone for Level {
-    fn clone(&self) -> Self {
-        Level {
-            name: self.name.clone(),
-            time: self.time,
-            completed: self.completed,
-        }
-    }
 }
 
 impl Into<JsonValue> for Level {
@@ -31,25 +24,23 @@ impl Into<JsonValue> for Level {
         object! {
             name: self.name,
             time: self.time,
-            completed: self.completed
+            completed: self.completed,
+            used_hints: self.used_hints
         }
     }
 }
 
 impl From<JsonValue> for Level {
     fn from(value: JsonValue) -> Self {
-        if !value.is_object() {
-            return Level {
-                name: "".to_string(),
-                time: 0f32,
-                completed: false,
-            };
-        }
         let mut parsed = Level {
             name: "".to_string(),
             time: 0f32,
             completed: false,
+            used_hints: 0
         };
+        if !value.is_object() {
+            return parsed
+        }
         for (key, v) in value.entries() {
             match key {
                 "name" => {
@@ -65,6 +56,11 @@ impl From<JsonValue> for Level {
                 "completed" => {
                     if let Some(completed) = v.as_bool() {
                         parsed.completed = completed;
+                    }
+                }
+                "used_hints" => {
+                    if let Some(uhints) = v.as_usize() {
+                        parsed.used_hints = uhints;
                     }
                 }
                 _ => {}
@@ -105,25 +101,6 @@ impl From<JsonValue> for Savefile {
     }
 }
 
-impl Debug for Level {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.debug_struct("Level")
-            .field("name", &self.name)
-            .field("time", &self.time)
-            .field("completed", &self.completed)
-            .finish()
-    }
-}
-
-impl Debug for Savefile {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.debug_struct("Savefile")
-            .field("entropy", &self.entropy)
-            .field("levels", &self.levels)
-            .finish()
-    }
-}
-
 pub fn empty_savefile(entropy: String) -> Savefile {
     Savefile {
         entropy: entropy,
@@ -132,91 +109,109 @@ pub fn empty_savefile(entropy: String) -> Savefile {
                 time: 0f32,
                 completed: false,
                 name: "80808".to_string(),
+                used_hints: 0,
             },
             Level {
                 time: 0f32,
                 completed: false,
                 name: "HAZARD DUTY PAY!".to_string(),
+                used_hints: 0,
             },
             Level {
                 time: 0f32,
                 completed: false,
                 name: "Krystle".to_string(),
+                used_hints: 0,
             },
             Level {
                 time: 0f32,
                 completed: false,
                 name: "Rainbow Six".to_string(),
+                used_hints: 0,
             },
             Level {
                 time: 0f32,
                 completed: false,
                 name: "Hollywood Baby".to_string(),
+                used_hints: 0,
             },
             Level {
                 time: 0f32,
                 completed: false,
                 name: "Western Union".to_string(),
+                used_hints: 0,
             },
             Level {
                 time: 0f32,
                 completed: false,
                 name: "toothless".to_string(),
+                used_hints: 0,
             },
             Level {
                 time: 0f32,
                 completed: false,
                 name: "God Loves You".to_string(),
+                used_hints: 0,
             },
             Level {
                 time: 0f32,
                 completed: false,
                 name: "Known For It".to_string(),
+                used_hints: 0,
             },
             Level {
                 time: 0f32,
                 completed: false,
                 name: "Drake Era".to_string(),
+                used_hints: 0,
             },
             Level {
                 time: 0f32,
                 completed: false,
                 name: "Out by 16, Dead on the Scene".to_string(),
+                used_hints: 0,
             },
             Level {
                 time: 0f32,
                 completed: false,
                 name: "The Fear".to_string(),
+                used_hints: 0,
             },
             Level {
                 time: 0f32,
                 completed: false,
                 name: "Tantor".to_string(),
+                used_hints: 0
             },
             Level {
                 time: 0f32,
                 completed: false,
                 name: "DEATHCAMP".to_string(),
+                used_hints: 0,
             },
             Level {
                 time: 0f32,
                 completed: false,
                 name: "Burfict!".to_string(),
+                used_hints: 0,
             },
             Level {
                 time: 0f32,
                 completed: false,
-                name: "I Cannot Fucking Wait Til Morrissey Dies".to_string(),
+                name: "The 27 Club".to_string(),
+                used_hints: 0,
             },
             Level {
                 time: 0f32,
                 completed: false,
                 name: "Free The Frail".to_string(),
+                used_hints: 0,
             },
             Level {
                 time: 0f32,
                 completed: false,
                 name: "Today".to_string(),
+                used_hints: 0,
             },
         ],
     }
@@ -231,6 +226,11 @@ pub fn save_settings(entropy: String, levels: Vec<Level>) -> Result<(), io::Erro
     let mut file = File::create("data.json")?;
     file.write_all(json_data.as_bytes())
 }
+
+pub fn save_savefile(savefile: &Savefile) -> Result<(), io::Error> {
+    save_settings(savefile.entropy.to_string(), savefile.levels.clone())
+}
+
 pub fn read_settings() -> Result<Savefile, io::Error> {
     let file_content = fs::read_to_string("data.json")?;
     let file_json = json::parse(&file_content).unwrap();

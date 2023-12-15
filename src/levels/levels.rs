@@ -15,7 +15,7 @@ pub enum LevelName {
     Tantor,
     Deathcamp,
     Burfict,
-    CannotWaitTil,
+    The27Club,
     FreeTheFrail,
     Today
 }
@@ -37,7 +37,7 @@ pub fn num_to_level_enum(number: usize) -> Option<LevelName> {
         12 => Some(LevelName::Tantor),
         13 => Some(LevelName::Deathcamp),
         14 => Some(LevelName::Burfict),
-        15 => Some(LevelName::CannotWaitTil),
+        15 => Some(LevelName::The27Club),
         16 => Some(LevelName::FreeTheFrail),
         17 => Some(LevelName::Today),
         _ => None

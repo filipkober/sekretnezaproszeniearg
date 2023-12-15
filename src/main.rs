@@ -37,7 +37,6 @@ fn main() -> Result<(), io::Error> {
     if !settings_exist() {
         let (entropy, answers) = entropy(&mut terminal)?;
     }
-    let mut savefile = read_settings()?;
 
     let render_options: Vec<SelectableListOption<MenuOption>> = vec![
         SelectableListOption {
@@ -82,6 +81,8 @@ fn main() -> Result<(), io::Error> {
     ];
 
     loop {
+        let mut savefile = read_settings()?;
+        
         let selected: MenuOption =
             render_list(&mut terminal, "Menu", &render_options, Some(&text_before)).unwrap();
 
