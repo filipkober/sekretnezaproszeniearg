@@ -5,7 +5,7 @@ use tui::{Terminal, backend::CrosstermBackend, text::{Spans, Span}, style::Style
 
 use crate::util::{save::{Savefile, empty_savefile, save_settings}, termutils::{render_list, SelectableListOption}};
 
-use super::{levels::{LevelName, num_to_level_enum}, eightoeightoeight};
+use super::{levels::{LevelName, num_to_level_enum}, eightoeightoeight, hazarddutypay, krystle, rainbowsix, hollywoodbaby};
 
 pub fn help(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>) {
 
@@ -117,10 +117,10 @@ pub fn level_select(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savef
     if let Some(chosen_level) = chosen {
         match chosen_level {
             LevelName::EightOEightOEight => eightoeightoeight::level(terminal, savefile),
-            LevelName::HazardDutyPay => todo!(),
-            LevelName::Krystle => todo!(),
-            LevelName::RainbowSix => todo!(),
-            LevelName::HollywoodBaby => todo!(),
+            LevelName::HazardDutyPay => hazarddutypay::level(terminal, savefile),
+            LevelName::Krystle => krystle::level(terminal, savefile),
+            LevelName::RainbowSix => rainbowsix::level(terminal, savefile),
+            LevelName::HollywoodBaby => hollywoodbaby::level(terminal, savefile),
             LevelName::WesternUnion => todo!(),
             LevelName::Toothless => todo!(),
             LevelName::GodLovesYou => todo!(),
