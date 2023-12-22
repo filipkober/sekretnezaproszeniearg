@@ -17,15 +17,13 @@ use crate::util::{
     termutils::keyboard_input,
 };
 
-const LEVEL_NAME: &str = "Krystle";
-const LEVEL_NUM: usize = 2;
-const ANS: &str = "89677";
-const HINT1: &str = "Skanowałeś to już?";
-const HINT2: &str = "Co ten użytkownik postował?";
+const LEVEL_NAME: &str = "The Fear";
+const LEVEL_NUM: usize = 11;
+const ANS: &str = "347294";
+const HINT1: &str = "hmm, trochę tu pusto, strona chyba wymaga INSPEKCJI";
+const HINT2: &str = "spojrzałbym na inputy";
 
 pub fn level(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savefile: &mut Savefile) {
-
-    let mut input_buffer = String::new();
 
     let time = savefile.levels[LEVEL_NUM].time;
     let timestamp_0 = std::time::SystemTime::now()
@@ -33,12 +31,7 @@ pub fn level(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savefile: &m
         .unwrap()
         .as_secs();
 
-    let qrc = qr_code::QrCode::new(b"https://twitter.com/einisisese").unwrap();
-
-    let binding = qrc.to_string(false, 3);
-    let spans: Vec<Spans> = binding.split("\n").map(|v| {
-        Spans::from(v)
-    }).collect();
+    let mut input_buffer = String::new();
 
     let hints = vec![
         Spans::from(format!("Podpowiedź 1: {}", HINT1)),
@@ -55,8 +48,10 @@ pub fn level(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savefile: &m
                     .title(LEVEL_NAME)
                     .borders(tui::widgets::Borders::ALL);
 
-                let mut text: Vec<Spans> = spans.clone();
-                text.push(Spans::from(""));
+                let mut text = vec![
+                    Spans::from("https://entr0py.nigdit.men/f"),
+                    Spans::from(""),
+                ];
 
                 if savefile.levels[LEVEL_NUM].used_hints > 0 {
                     for i in 0..savefile.levels[LEVEL_NUM].used_hints {

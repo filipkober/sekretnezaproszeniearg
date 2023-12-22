@@ -5,7 +5,7 @@ use tui::{Terminal, backend::CrosstermBackend, text::{Spans, Span}, style::Style
 
 use crate::util::{save::{Savefile, empty_savefile, save_settings}, termutils::{render_list, SelectableListOption}};
 
-use super::{levels::{LevelName, num_to_level_enum}, eightoeightoeight, hazarddutypay, krystle, rainbowsix, hollywoodbaby};
+use super::{levels::{LevelName, num_to_level_enum}, eightoeightoeight, hazarddutypay, krystle, rainbowsix, hollywoodbaby, westernunion, toothless, godlovesyou, knownforit, drakeera, outbysixteen, thefear};
 
 pub fn help(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>) {
 
@@ -121,13 +121,13 @@ pub fn level_select(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savef
             LevelName::Krystle => krystle::level(terminal, savefile),
             LevelName::RainbowSix => rainbowsix::level(terminal, savefile),
             LevelName::HollywoodBaby => hollywoodbaby::level(terminal, savefile),
-            LevelName::WesternUnion => todo!(),
-            LevelName::Toothless => todo!(),
-            LevelName::GodLovesYou => todo!(),
-            LevelName::KnownForIt => todo!(),
-            LevelName::DrakeEra => todo!(),
-            LevelName::OutBy16DeadOnTheScene => todo!(),
-            LevelName::TheFear => todo!(),
+            LevelName::WesternUnion => westernunion::level(terminal, savefile),
+            LevelName::Toothless => toothless::level(terminal, savefile),
+            LevelName::GodLovesYou => godlovesyou::level(terminal, savefile),
+            LevelName::KnownForIt => knownforit::level(terminal, savefile),
+            LevelName::DrakeEra => drakeera::level(terminal, savefile),
+            LevelName::OutBy16DeadOnTheScene => outbysixteen::level(terminal, savefile),
+            LevelName::TheFear => thefear::level(terminal, savefile),
             LevelName::Tantor => todo!(),
             LevelName::Deathcamp => todo!(),
             LevelName::Burfict => todo!(),

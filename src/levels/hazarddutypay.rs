@@ -27,6 +27,12 @@ pub fn level(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savefile: &m
 
     let mut input_buffer = String::new();
 
+    let time = savefile.levels[LEVEL_NUM].time;
+    let timestamp_0 = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .unwrap()
+        .as_secs();
+
     let hints = vec![
         Spans::from(format!("Podpowiedź 1: {}", HINT1)),
         Spans::from(format!("Podpowiedź 2: {}", HINT2)),
@@ -43,7 +49,7 @@ pub fn level(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savefile: &m
                     .borders(tui::widgets::Borders::ALL);
 
                 let mut text = vec![
-                    Spans::from("https://entr0py.nigdit.me/hdp"),
+                    Spans::from("https://entr0py.nigdit.men/hdp"),
                     Spans::from(""),
                 ];
 
@@ -94,6 +100,14 @@ pub fn level(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savefile: &m
             break;
         }
     }
+    let timestamp_1 = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .unwrap()
+        .as_secs();
+
+    savefile.levels[LEVEL_NUM].time = time + (timestamp_1 - timestamp_0) as f32;
+
+    save_savefile(savefile).unwrap();
 
     if savefile.levels[LEVEL_NUM].completed {
         terminal

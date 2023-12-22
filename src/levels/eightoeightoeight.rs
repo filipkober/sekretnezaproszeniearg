@@ -22,6 +22,12 @@ pub fn level(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savefile: &m
     let bf_string = "++++++++[>+++++++<-]>+..";
     let ans = "99".to_string();
 
+    let time = savefile.levels[0].time;
+    let timestamp_0 = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .unwrap()
+        .as_secs();
+
     let mut input_buffer = String::new();
 
     let hints = vec![
@@ -94,6 +100,15 @@ pub fn level(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savefile: &m
             break;
         }
     }
+
+    let timestamp_1 = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .unwrap()
+        .as_secs();
+
+    savefile.levels[0].time = time + (timestamp_1 - timestamp_0) as f32;
+
+    save_savefile(savefile).unwrap();
 
     if savefile.levels[0].completed {
         let mut file = File::create("80808.txt").unwrap();

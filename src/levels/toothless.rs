@@ -17,11 +17,11 @@ use crate::util::{
     termutils::keyboard_input,
 };
 
-const LEVEL_NAME: &str = "Krystle";
-const LEVEL_NUM: usize = 2;
-const ANS: &str = "89677";
-const HINT1: &str = "Skanowałeś to już?";
-const HINT2: &str = "Co ten użytkownik postował?";
+const LEVEL_NAME: &str = "Toothless";
+const LEVEL_NUM: usize = 6;
+const ANS: &str = "8693957928536021";
+const HINT1: &str = "Co znaczy B64?";
+const HINT2: &str = "⚛⚛⚛";
 
 pub fn level(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savefile: &mut Savefile) {
 
@@ -32,13 +32,6 @@ pub fn level(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savefile: &m
         .duration_since(std::time::UNIX_EPOCH)
         .unwrap()
         .as_secs();
-
-    let qrc = qr_code::QrCode::new(b"https://twitter.com/einisisese").unwrap();
-
-    let binding = qrc.to_string(false, 3);
-    let spans: Vec<Spans> = binding.split("\n").map(|v| {
-        Spans::from(v)
-    }).collect();
 
     let hints = vec![
         Spans::from(format!("Podpowiedź 1: {}", HINT1)),
@@ -55,8 +48,10 @@ pub fn level(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savefile: &m
                     .title(LEVEL_NAME)
                     .borders(tui::widgets::Borders::ALL);
 
-                let mut text: Vec<Spans> = spans.clone();
-                text.push(Spans::from(""));
+                let mut text = vec![
+                    Spans::from("B64=T1RtWUJORk5pSU5kU2M="),
+                    Spans::from(""),
+                ];
 
                 if savefile.levels[LEVEL_NUM].used_hints > 0 {
                     for i in 0..savefile.levels[LEVEL_NUM].used_hints {

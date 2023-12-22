@@ -1,8 +1,4 @@
-use std::{
-    io,
-    thread,
-    time::Duration,
-};
+use std::{collections::HashMap, io, thread, time::Duration};
 
 use tui::{
     backend::CrosstermBackend,
@@ -13,32 +9,25 @@ use tui::{
 };
 
 use crate::util::{
+    requests,
     save::{save_savefile, Savefile},
     termutils::keyboard_input,
 };
 
-const LEVEL_NAME: &str = "Krystle";
-const LEVEL_NUM: usize = 2;
-const ANS: &str = "89677";
-const HINT1: &str = "Skanowałeś to już?";
-const HINT2: &str = "Co ten użytkownik postował?";
+const LEVEL_NAME: &str = "Drake Era";
+const LEVEL_NUM: usize = 9;
+const ANS: &str = "888553";
+const HINT1: &str = "nowa komenda!";
+const HINT2: &str = "podałeś twój email?";
 
 pub fn level(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savefile: &mut Savefile) {
-
-    let mut input_buffer = String::new();
-
     let time = savefile.levels[LEVEL_NUM].time;
     let timestamp_0 = std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
         .unwrap()
         .as_secs();
 
-    let qrc = qr_code::QrCode::new(b"https://twitter.com/einisisese").unwrap();
-
-    let binding = qrc.to_string(false, 3);
-    let spans: Vec<Spans> = binding.split("\n").map(|v| {
-        Spans::from(v)
-    }).collect();
+    let mut input_buffer = String::new();
 
     let hints = vec![
         Spans::from(format!("Podpowiedź 1: {}", HINT1)),
@@ -55,8 +44,7 @@ pub fn level(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savefile: &m
                     .title(LEVEL_NAME)
                     .borders(tui::widgets::Borders::ALL);
 
-                let mut text: Vec<Spans> = spans.clone();
-                text.push(Spans::from(""));
+                let mut text = vec![Spans::from("..."), Spans::from("")];
 
                 if savefile.levels[LEVEL_NUM].used_hints > 0 {
                     for i in 0..savefile.levels[LEVEL_NUM].used_hints {
@@ -67,7 +55,7 @@ pub fn level(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savefile: &m
                 }
                 text.push("".into());
                 text.push(Spans::from(Span::styled(
-                    "[dostępne komendy: hint, exit, <odpowiedź>]",
+                    "[dostępne komendy: hint, exit, email <twoj_email>, <odpowiedź>]",
                     Style::default().add_modifier(Modifier::ITALIC),
                 )));
                 text.push("".into());
@@ -98,6 +86,21 @@ pub fn level(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savefile: &m
             } else if *output == "hint" && savefile.levels[LEVEL_NUM].used_hints < 3 {
                 savefile.levels[LEVEL_NUM].used_hints += 1;
                 save_savefile(savefile).unwrap();
+            } else {
+                let split = output.split(" ").collect::<Vec<&str>>();
+                if split.len() == 2 && split[0] == "email" {
+                    let email = split[1].to_owned();
+                    thread::spawn(move || {
+                        let mut map = HashMap::new();
+                        map.insert("email", email);
+                        let client = reqwest::blocking::Client::new();
+                        client
+                            .post("https://entr0py.nigdit.men/drakera")
+                            .json(&map)
+                            .send()
+                            .unwrap();
+                    });
+                }
             }
         });
 

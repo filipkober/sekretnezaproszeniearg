@@ -17,34 +17,27 @@ use crate::util::{
     termutils::keyboard_input,
 };
 
-const LEVEL_NAME: &str = "Krystle";
-const LEVEL_NUM: usize = 2;
-const ANS: &str = "89677";
-const HINT1: &str = "Skanowałeś to już?";
-const HINT2: &str = "Co ten użytkownik postował?";
+const LEVEL_NAME: &str = "Western Union";
+const LEVEL_NUM: usize = 5;
+const ANS: &str = "156000";
+const HINT1: &str = "To jest ważna data, coś się wtedy stało";
+const HINT2: &str = "Do jakiej liczby może odnosić się siła w szturmie?";
 
 pub fn level(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savefile: &mut Savefile) {
 
     let mut input_buffer = String::new();
-
-    let time = savefile.levels[LEVEL_NUM].time;
-    let timestamp_0 = std::time::SystemTime::now()
-        .duration_since(std::time::UNIX_EPOCH)
-        .unwrap()
-        .as_secs();
-
-    let qrc = qr_code::QrCode::new(b"https://twitter.com/einisisese").unwrap();
-
-    let binding = qrc.to_string(false, 3);
-    let spans: Vec<Spans> = binding.split("\n").map(|v| {
-        Spans::from(v)
-    }).collect();
 
     let hints = vec![
         Spans::from(format!("Podpowiedź 1: {}", HINT1)),
         Spans::from(format!("Podpowiedź 2: {}", HINT2)),
         Spans::from(format!("Odpowiedź: {}", ANS)),
     ];
+
+    let time = savefile.levels[LEVEL_NUM].time;
+    let timestamp_0 = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .unwrap()
+        .as_secs();
 
     let mut endlevel = false;
 
@@ -55,8 +48,10 @@ pub fn level(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savefile: &m
                     .title(LEVEL_NAME)
                     .borders(tui::widgets::Borders::ALL);
 
-                let mut text: Vec<Spans> = spans.clone();
-                text.push(Spans::from(""));
+                let mut text = vec![
+                    Spans::from("SIŁA 06.06.1944"),
+                    Spans::from(""),
+                ];
 
                 if savefile.levels[LEVEL_NUM].used_hints > 0 {
                     for i in 0..savefile.levels[LEVEL_NUM].used_hints {

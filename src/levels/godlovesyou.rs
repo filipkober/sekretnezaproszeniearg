@@ -17,15 +17,13 @@ use crate::util::{
     termutils::keyboard_input,
 };
 
-const LEVEL_NAME: &str = "Krystle";
-const LEVEL_NUM: usize = 2;
-const ANS: &str = "89677";
-const HINT1: &str = "Skanowałeś to już?";
-const HINT2: &str = "Co ten użytkownik postował?";
+const LEVEL_NAME: &str = "God Loves You";
+const LEVEL_NUM: usize = 7;
+const ANS: &str = "4284";
+const HINT1: &str = "interpretacja tekstu";
+const HINT2: &str = "4 cyfry są ukryte";
 
 pub fn level(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savefile: &mut Savefile) {
-
-    let mut input_buffer = String::new();
 
     let time = savefile.levels[LEVEL_NUM].time;
     let timestamp_0 = std::time::SystemTime::now()
@@ -33,12 +31,7 @@ pub fn level(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savefile: &m
         .unwrap()
         .as_secs();
 
-    let qrc = qr_code::QrCode::new(b"https://twitter.com/einisisese").unwrap();
-
-    let binding = qrc.to_string(false, 3);
-    let spans: Vec<Spans> = binding.split("\n").map(|v| {
-        Spans::from(v)
-    }).collect();
+    let mut input_buffer = String::new();
 
     let hints = vec![
         Spans::from(format!("Podpowiedź 1: {}", HINT1)),
@@ -55,8 +48,23 @@ pub fn level(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savefile: &m
                     .title(LEVEL_NAME)
                     .borders(tui::widgets::Borders::ALL);
 
-                let mut text: Vec<Spans> = spans.clone();
-                text.push(Spans::from(""));
+                let mut text = vec![
+                    Spans::from("Kosmiczna otchłani, ciszy twój czar,"),
+                    Spans::from("Cztery gwiazdy na niebie mienią się twardo."),
+                    Spans::from("Ciemność roztacza swój tajemny dar,"),
+                    Spans::from("Zwielokrotniony czas, przestrzeń na dwa odpadło."),
+                    Spans::from(""),
+                    Spans::from("Ósma z planet jest tu nieznana,"),
+                    Spans::from("W mroku ukryta, tajemnice skrywa."),
+                    Spans::from("Pustka i zimno - oto jej rana,"),
+                    Spans::from("Czy człowiek ją kiedykolwiek odkrywa?"),
+                    Spans::from(""),
+                    Spans::from("Cztery meteory zioną ogień zza mgieł,"),
+                    Spans::from("Światło ich w ciemnościach błądzi."),
+                    Spans::from("Czy to jest mrok, czy może już dzień,"),
+                    Spans::from("Ku niewiadomej drodze nas prowadzi."),
+                    Spans::from(""),
+                ];
 
                 if savefile.levels[LEVEL_NUM].used_hints > 0 {
                     for i in 0..savefile.levels[LEVEL_NUM].used_hints {
