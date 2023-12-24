@@ -4,7 +4,7 @@ use tui::{
     backend::CrosstermBackend,
     style::{Modifier, Style},
     text::{Span, Spans},
-    widgets::{Block, Borders, Paragraph},
+    widgets::{Block, Borders, Paragraph, Wrap},
     Terminal,
 };
 
@@ -73,7 +73,7 @@ pub fn level(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savefile: &m
                     Span::from(input_buffer.clone()),
                 ]));
 
-                let paragraph = Paragraph::new(text).block(block);
+                let paragraph = Paragraph::new(text).block(block).wrap(Wrap { trim: true });
 
                 f.render_widget(paragraph, f.size());
             })

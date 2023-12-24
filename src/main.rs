@@ -7,27 +7,18 @@ mod util;
 use crate::util::save::{read_settings, settings_exist};
 use crate::util::termutils::{exit_terminal, setup_terminal};
 use entropy::entropy;
-use levels::mainmenu::{help, settings, level_select};
+use levels::mainmenu::{help, settings, level_select, reward};
 use tui::style::{Modifier, Style};
 use tui::text::{Span, Spans};
 use util::termutils::{render_list, SelectableListOption};
 
+#[derive(Clone, PartialEq)]
 enum MenuOption {
     Select,
     Help,
     Settings,
     Exit,
-}
-
-impl Clone for MenuOption {
-    fn clone(&self) -> Self {
-        match self {
-            MenuOption::Select => MenuOption::Select,
-            MenuOption::Help => MenuOption::Help,
-            MenuOption::Settings => MenuOption::Settings,
-            MenuOption::Exit => MenuOption::Exit,
-        }
-    }
+    Reward
 }
 
 #[allow(unused_variables)]
@@ -38,7 +29,7 @@ fn main() -> Result<(), io::Error> {
         let (entropy, answers) = entropy(&mut terminal)?;
     }
 
-    let render_options: Vec<SelectableListOption<MenuOption>> = vec![
+    let mut render_options: Vec<SelectableListOption<MenuOption>> = vec![
         SelectableListOption {
             name: "Wybierz poziom".into(),
             value: MenuOption::Select,
@@ -82,6 +73,21 @@ fn main() -> Result<(), io::Error> {
 
     loop {
         let mut savefile = read_settings()?;
+
+        let completed_levels = savefile
+            .levels
+            .iter()
+            .filter(|level| level.completed)
+            .count();
+
+        if completed_levels == 18 {
+            if !render_options.iter().any(|option| option.value == MenuOption::Reward) {
+            render_options.push(SelectableListOption {
+                name: "Nagroda".into(),
+                value: MenuOption::Reward,
+            })
+        }
+        }
         
         let selected: MenuOption =
             render_list(&mut terminal, "Menu", &render_options, Some(&text_before)).unwrap();
@@ -91,6 +97,7 @@ fn main() -> Result<(), io::Error> {
             MenuOption::Help => help(&mut terminal),
             MenuOption::Settings => settings(&mut terminal, &mut savefile),
             MenuOption::Exit => break,
+            MenuOption::Reward => reward(&mut terminal),
         }
     }
     exit_terminal(&mut terminal)

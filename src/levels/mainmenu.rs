@@ -140,3 +140,60 @@ pub fn level_select(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savef
     Ok(())
 
 }
+
+pub fn reward(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>) {
+    
+        let text: Vec<Spans> = vec![
+            Spans::from(vec![
+                Span::styled("Gratulacje! Ukończyłeś grę ", tui::style::Style::default().add_modifier(tui::style::Modifier::BOLD)),
+                Span::styled("Entr0py", tui::style::Style::default().fg(tui::style::Color::Green).add_modifier(tui::style::Modifier::BOLD)),
+                Span::styled("!\n", tui::style::Style::default().add_modifier(tui::style::Modifier::BOLD)),
+            ]),
+            Spans::from(""),
+            Spans::from("Celem tego programu jest zaproszenie:"),
+            Spans::from("Zostałeś oficjalnie zaproszony na moje 18te urodziny!"),
+            Spans::from("Odbędą się 31.01.2024"),
+            Spans::from("Punkt zbiórki: Tytusa Chałubińskiego 31, 80-807 Gdańsk"),
+            Spans::from("Godzina: 10:00"),
+            Spans::from("Plan:"),
+            Spans::from(" - strzelnica"),
+            Spans::from(" - flippery + obiad tam (http://flipperstacja.pl/)"),
+            Spans::from(" - kolacja w restauracji (http://gdansk.crazybutcher.pl/)"),
+            Spans::from(""),
+            Spans::from("zobaczymy się na miejscu!"),
+            Spans::from(""),
+            Spans::from("NAGRODA BONUSOWA: "),
+            Spans::from("1. wejdź na https://entr0py.nigdit.men/"),
+            Spans::from("2. pod tekstem jest ukryty input"),
+            Spans::from("3. wpisz tam \"haslomaslo\""),
+            Spans::from("4. naciśnij <ENTER>"),
+            Spans::from("5. przejdź na https://entr0py.nigdit.men/admin/panel"),
+            Spans::from("6. masz dostęp do odpowiedzi/postępu innych!"),
+            Spans::from(""),
+            Spans::from("<koniec transmisji>"),
+            Spans::from("[Naciśnij dowolny klawisz aby wrócić do menu]"),
+        ];
+    
+        loop {
+            terminal.draw(|f| {
+                let size = f.size();
+                let block = tui::widgets::Block::default()
+                    .title("Nagroda")
+                    .borders(tui::widgets::Borders::ALL);
+                let paragraph = tui::widgets::Paragraph::new(text.clone()).block(block);
+                f.render_widget(paragraph, size);
+            }).unwrap();
+            if let Ok(event) = read() {
+                match event {
+                    event::Event::Key(
+                        KeyEvent {
+                            kind: event::KeyEventKind::Press,
+                            ..
+                        }
+                    ) => break,
+                    _ => {}
+                    
+                }
+            }
+        }
+}
