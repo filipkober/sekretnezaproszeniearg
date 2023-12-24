@@ -1,6 +1,5 @@
 use std::{
-    fs::File,
-    io::{self, Write},
+    io,
     thread,
     time::Duration,
 };
@@ -18,11 +17,15 @@ use crate::util::{
     termutils::keyboard_input, analyticsrequests,
 };
 
-pub fn level(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savefile: &mut Savefile) {
-    let bf_string = "++++++++[>+++++++<-]>+..";
-    let ans = "99".to_string();
+const LEVEL_NAME: &str = "Tantor";
+const LEVEL_NUM: usize = 12;
+const ANS: &str = "583169260277";
+const HINT1: &str = "interpretowałbym każde z tych słów osobno";
+const HINT2: &str = "potrzeba więcej niż jednego słownika do uzyskania odpowiedzi";
 
-    let time = savefile.levels[0].time;
+pub fn level(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savefile: &mut Savefile) {
+
+    let time = savefile.levels[LEVEL_NUM].time;
     let timestamp_0 = std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
         .unwrap()
@@ -31,13 +34,10 @@ pub fn level(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savefile: &m
     let mut input_buffer = String::new();
 
     let hints = vec![
-        Spans::from("Podpowiedź 1: Jakiegoś rodzaju kodowanie..."),
-        Spans::from("Podpowiedź 2: Być może plik powinien nazywać się 80808.bf"),
-        Spans::from("Odpowiedź: 99"),
+        Spans::from(format!("Podpowiedź 1: {}", HINT1)),
+        Spans::from(format!("Podpowiedź 2: {}", HINT2)),
+        Spans::from(format!("Odpowiedź: {}", ANS)),
     ];
-
-    let mut file = File::create("80808.txt").unwrap();
-    file.write_all(bf_string.as_bytes()).unwrap();
 
     let mut endlevel = false;
 
@@ -45,16 +45,16 @@ pub fn level(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savefile: &m
         terminal
             .draw(|f| {
                 let block = tui::widgets::Block::default()
-                    .title("80808")
+                    .title(LEVEL_NAME)
                     .borders(tui::widgets::Borders::ALL);
 
                 let mut text = vec![
-                    Spans::from("Coś pojawiło się w plikach..."),
+                    Spans::from("fayv nyolc kolme en suqta itoolu dua unom null deux bakwai yeddi"),
                     Spans::from(""),
                 ];
 
-                if savefile.levels[0].used_hints > 0 {
-                    for i in 0..savefile.levels[0].used_hints {
+                if savefile.levels[LEVEL_NUM].used_hints > 0 {
+                    for i in 0..savefile.levels[LEVEL_NUM].used_hints {
                         if let Some(hint) = hints.get(i) {
                             text.push(hint.clone())
                         }
@@ -84,14 +84,14 @@ pub fn level(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savefile: &m
             .unwrap();
 
         keyboard_input(&mut input_buffer, &mut |output| {
-            if *output == ans {
-                savefile.levels[0].completed = true;
+            if *output == ANS {
+                savefile.levels[LEVEL_NUM].completed = true;
                 save_savefile(savefile).unwrap();
                 endlevel = true;
             } else if *output == "exit" {
                 endlevel = true;
-            } else if *output == "hint" && savefile.levels[0].used_hints < 3 {
-                savefile.levels[0].used_hints += 1;
+            } else if *output == "hint" && savefile.levels[LEVEL_NUM].used_hints < 3 {
+                savefile.levels[LEVEL_NUM].used_hints += 1;
                 save_savefile(savefile).unwrap();
             }
         });
@@ -106,24 +106,22 @@ pub fn level(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savefile: &m
         .unwrap()
         .as_secs();
 
-    savefile.levels[0].time = time + (timestamp_1 - timestamp_0) as f32;
+    savefile.levels[LEVEL_NUM].time = time + (timestamp_1 - timestamp_0) as f32;
 
     save_savefile(savefile).unwrap();
 
     analyticsrequests::update_level(
         savefile.entropy.clone(),
-        savefile.levels[0].time.clone(),
-        savefile.levels[0].used_hints.clone(),
-        savefile.levels[0].completed.clone(),
-        0,
+        savefile.levels[LEVEL_NUM].time.clone(),
+        savefile.levels[LEVEL_NUM].used_hints.clone(),
+        savefile.levels[LEVEL_NUM].completed.clone(),
+        LEVEL_NUM,
     );
 
-    if savefile.levels[0].completed {
-        let mut file = File::create("80808.txt").unwrap();
-        file.write_all(bf_string.as_bytes()).unwrap();
+    if savefile.levels[LEVEL_NUM].completed {
         terminal
             .draw(|f| {
-                let block = Block::default().title("80808").borders(Borders::ALL);
+                let block = Block::default().title(LEVEL_NAME).borders(Borders::ALL);
                 let para = Paragraph::new(Span::styled(
                     "Poprawna odpowiedź, wychodzenie za 3 sekundy...",
                     Style::default().fg(tui::style::Color::Green),

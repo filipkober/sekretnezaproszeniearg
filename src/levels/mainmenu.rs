@@ -5,7 +5,7 @@ use tui::{Terminal, backend::CrosstermBackend, text::{Spans, Span}, style::Style
 
 use crate::util::{save::{Savefile, empty_savefile, save_settings}, termutils::{render_list, SelectableListOption}};
 
-use super::{levels::{LevelName, num_to_level_enum}, eightoeightoeight, hazarddutypay, krystle, rainbowsix, hollywoodbaby, westernunion, toothless, godlovesyou, knownforit, drakeera, outbysixteen, thefear};
+use super::{levels::{LevelName, num_to_level_enum}, eightoeightoeight, hazarddutypay, krystle, rainbowsix, hollywoodbaby, westernunion, toothless, godlovesyou, knownforit, drakeera, outbysixteen, thefear, tantor, deathcamp, burfict, thetwentysevenclub, freethefrail, today};
 
 pub fn help(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>) {
 
@@ -128,12 +128,12 @@ pub fn level_select(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savef
             LevelName::DrakeEra => drakeera::level(terminal, savefile),
             LevelName::OutBy16DeadOnTheScene => outbysixteen::level(terminal, savefile),
             LevelName::TheFear => thefear::level(terminal, savefile),
-            LevelName::Tantor => todo!(),
-            LevelName::Deathcamp => todo!(),
-            LevelName::Burfict => todo!(),
-            LevelName::The27Club => todo!(),
-            LevelName::FreeTheFrail => todo!(),
-            LevelName::Today => todo!(),
+            LevelName::Tantor => tantor::level(terminal, savefile),
+            LevelName::Deathcamp => deathcamp::level(terminal, savefile),
+            LevelName::Burfict => burfict::level(terminal, savefile),
+            LevelName::The27Club => thetwentysevenclub::level(terminal, savefile),
+            LevelName::FreeTheFrail => freethefrail::level(terminal, savefile),
+            LevelName::Today => today::level(terminal, savefile),
         }
     }
 

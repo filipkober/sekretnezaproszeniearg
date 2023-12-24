@@ -14,7 +14,7 @@ use tui::{
 
 use crate::util::{
     save::{save_savefile, Savefile},
-    termutils::keyboard_input,
+    termutils::keyboard_input, analyticsrequests,
 };
 
 const LEVEL_NAME: &str = "Rainbow Six";
@@ -109,6 +109,14 @@ pub fn level(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savefile: &m
     savefile.levels[LEVEL_NUM].time = time + (timestamp_1 - timestamp_0) as f32;
 
     save_savefile(savefile).unwrap();
+
+    analyticsrequests::update_level(
+        savefile.entropy.clone(),
+        savefile.levels[LEVEL_NUM].time.clone(),
+        savefile.levels[LEVEL_NUM].used_hints.clone(),
+        savefile.levels[LEVEL_NUM].completed.clone(),
+        LEVEL_NUM,
+    );
 
     if savefile.levels[LEVEL_NUM].completed {
         terminal

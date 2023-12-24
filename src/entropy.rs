@@ -4,7 +4,7 @@ use base64::{engine::general_purpose, Engine};
 use crossterm::event::{read, KeyEvent, Event, KeyCode, KeyEventKind};
 use tui::{Terminal, widgets::{Block, Borders, Paragraph}, text::{Span, Spans}, style::{Modifier, Style}, backend::CrosstermBackend};
 
-use crate::util::save::{save_settings, empty_savefile};
+use crate::util::{save::{save_settings, empty_savefile}, analyticsrequests};
 
 pub static QUESTIONS: [&str; 6] = [
     "Ulubiony kolor: ",
@@ -127,6 +127,8 @@ pub fn entropy(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>) -> Result<
     let empty_save = empty_savefile(str_encoded.clone());
 
     save_settings(str_encoded.clone(), empty_save.levels)?;
+
+    analyticsrequests::new_user(str_encoded.clone(), answers.clone());
 
     thread::sleep(Duration::from_millis(3_000));
 
