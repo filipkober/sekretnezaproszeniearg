@@ -142,23 +142,23 @@ pub fn keyboard_input(buffer: &mut String, on_submit: &mut dyn FnMut(&mut String
     if let Ok(event) = read() {
         match event {
             Event::Key(KeyEvent {
-                code: KeyCode::Char(c),
+                code,
+                kind: KeyEventKind::Press,
                 ..
             }) => {
-                buffer.push(c);
-            }
-            Event::Key(KeyEvent {
-                code: KeyCode::Backspace,
-                ..
-            }) => {
-                buffer.pop();
-            }
-            Event::Key(KeyEvent {
-                code: KeyCode::Enter,
-                ..
-            }) => {
-                on_submit(buffer);
-                buffer.clear();
+                match code {
+                    KeyCode::Enter => {
+                        on_submit(buffer);
+                        buffer.clear();
+                    }
+                    KeyCode::Backspace => {
+                        buffer.pop();
+                    }
+                    KeyCode::Char(c) => {
+                        buffer.push(c);
+                    }
+                    _ => {}
+                }
             }
             _ => {}
         }
