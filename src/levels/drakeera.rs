@@ -17,7 +17,7 @@ const LEVEL_NAME: &str = "Drake Era";
 const LEVEL_NUM: usize = 9;
 const ANS: &str = "888553";
 const HINT1: &str = "nowa komenda!";
-const HINT2: &str = "podałeś twój email?";
+const HINT2: &str = "sprawdź spam";
 
 pub fn level(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savefile: &mut Savefile) {
     let time = savefile.levels[LEVEL_NUM].time;
