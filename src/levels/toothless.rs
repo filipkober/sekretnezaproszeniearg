@@ -21,7 +21,7 @@ const LEVEL_NAME: &str = "Toothless";
 const LEVEL_NUM: usize = 6;
 const ANS: &str = "8693957928536021";
 const HINT1: &str = "Co znaczy B64?";
-const HINT2: &str = "⚛⚛⚛";
+const HINT2: &str = "⚛atomy⚛";
 
 pub fn level(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, savefile: &mut Savefile) {
 
